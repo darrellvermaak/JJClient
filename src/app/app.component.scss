@@ -39,6 +39,15 @@
     text-align: center;
   }
 
+  .navbar {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-spacer {
+    width: 50px;
+  }
+
   .toolbar img {
     margin: 0 16px;
   }
@@ -78,7 +87,7 @@
     border: 1px solid #eee;
     background-color: #fafafa;
     height: 40px;
-    width: 200px;
+    width: 300px;
     margin: 0 8px 16px;
     padding: 16px;
     display: flex;
@@ -95,7 +104,16 @@
 
   .card.card-small {
     height: 16px;
-    width: 168px;
+    width: 100px;
+    font-size: small;
+  }
+
+  .file-size {
+    float: left;
+  }
+
+  .permissions {
+    float: right;
   }
 
   .card-container .card:not(.highlight-card) {

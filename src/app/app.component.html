@@ -6,12 +6,23 @@
     alt="Angular Logo"
     src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg=="
   />
-  <span>File Browser - assessment for JobJack</span>
+  <span>File Browser assessment for JobJack</span>
     <div class="spacer"></div>
     <img style="width: 150px; height:auto; position: relative; top: -2px" src="https://jobjack.co.za/assets/img/logo/logo-half-green.png" alt="JOBJACK navbar logo">
 </div>
 
 <div class="content" role="main">
+  <div class="navbar">
+    <button class="btn btn-sm" (click)="btnBackClick()">
+      <span class="material-symbols-outlined">
+        arrow_back
+      </span>
+    </button>
+    <span class="navbar-spacer"></span>    
+    <h4>Current file path</h4>
+    <span class="navbar-spacer"></span>    
+    <p>{{currentDirPath}}</p>  
+  </div>
 
   <!-- Highlight Card -->
   <!-- <div class="card highlight-card card-small">
@@ -37,11 +48,9 @@
   </div> -->
 
   <!-- Resources -->
-  <h4>Current file path</h4>
-  <p>{{currentDirPath}}</p>
 
   <div class="card-container">
-    <a class="card" target="_blank" rel="noopener" href="https://angular.io/tutorial">
+    <!-- <a class="card" target="_blank" rel="noopener" href="https://angular.io/tutorial">
       <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
       <span>Learn Angular</span>
       <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>    </a>
@@ -68,23 +77,46 @@
       <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><g><rect fill="none" height="24" width="24"/></g><g><g><path d="M14.73,13.31C15.52,12.24,16,10.93,16,9.5C16,5.91,13.09,3,9.5,3S3,5.91,3,9.5C3,13.09,5.91,16,9.5,16 c1.43,0,2.74-0.48,3.81-1.27L19.59,21L21,19.59L14.73,13.31z M9.5,14C7.01,14,5,11.99,5,9.5S7.01,5,9.5,5S14,7.01,14,9.5 S11.99,14,9.5,14z"/><polygon points="10.29,8.44 9.5,6 8.71,8.44 6.25,8.44 8.26,10.03 7.49,12.5 9.5,10.97 11.51,12.5 10.74,10.03 12.75,8.44"/></g></g></svg>
       <span>Angular DevTools</span>
       <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-    </a>
-
-  </div>
+    </a> -->
+<!-- 
+  </div> -->
 
   <!-- Next Steps -->
-  <h2>Next Steps</h2>
+  <!-- <h2>Next Steps</h2>
   <p>What do you want to do next with your app?</p>
 
-  <input type="hidden" #selection>
+  <input type="hidden" #selection> -->
 
+  <div *ngFor="let entity of dataentitiesObservable | async" class="card-container">
   <div class="card-container">
-    <button class="card card-small" (click)="selection.value = 'component'" tabindex="0">
-      <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-      <span>New Component</span>
+    <button class="card"  tabindex="0" *ngIf="entity.isDirectory" (click)="newDirPathSelected(entity.fileName)">
+      <span class="material-symbols-outlined">
+        {{ entity.isDirectory ? 'folder' : 'draft'}}
+      </span>
+      <span>{{ entity.fileName }}</span>
+      <div class="card-small">
+        <span>{{ entity.createdDate }}</span>
+      </div>
+      <div class="card-small">
+        <span>{{ entity.fileSize.toString() + '  ' + entity.permissions }}</span>
+      </div>
     </button>
+    <button class="card"  tabindex="0" *ngIf="!entity.isDirectory" >
+      <span class="material-symbols-outlined">
+        {{ entity.isDirectory ? 'folder' : 'draft'}}
+      </span>
+      <span>{{ entity.fileName }}</span>
+      <div class="card-small">
+        <span>{{ entity.createdDate }}</span>
+      </div>
+      <div class="card-small">
+        <span>{{ entity.fileSize.toString() + '  ' + entity.permissions }}</span>
+      </div>
+    </button>
+  </div>
+  </div>
 
-    <button class="card card-small" (click)="selection.value = 'material'" tabindex="0">
+    <!-- <button class="card card-small" (click)="selection.value = 'material'" tabindex="0">
       <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
       <span>Angular Material</span>
     </button>
@@ -107,9 +139,7 @@
     <button class="card card-small" (click)="selection.value = 'build'" tabindex="0">
       <svg class="material-icons" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
       <span>Build for Production</span>
-    </button>
-  </div>
-
+    </button> -->
   <!-- Footer -->
   <footer>
     <button class="btn btn-secondary btn-sm" (click)="btnStartClick()">
@@ -125,8 +155,8 @@
     <span class="entries-per-page-label">Entries per page</span>
     <select id="itemsPerPage" #itemsPerPage class="form-control" (change)="itemsPerPageChange(itemsPerPage.value)">
       <option>10</option>
-      <option>20</option>
-      <option>50</option>
+      <option selected>20</option>
+      <option>40</option>
     </select>
     <button class="btn btn-secondary btn-sm" (click)="btnNextClick()">
       <span class="material-symbols-outlined">

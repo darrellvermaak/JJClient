@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DirPathService } from './services/dir-path.service';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { AppComponent } from './app.component';
     NgbModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [DirPathService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
